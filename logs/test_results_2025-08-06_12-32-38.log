@@ -1,0 +1,20 @@
+
+=== Test Run: 2025-08-06 12:33:36 ===
+..............F.....F.........                                           [100%]
+================================== FAILURES ===================================
+_________________________ test_list_tasks_performance _________________________
+tests\test_generated_api_2025-08-06_12-32-38.py:216: in test_list_tasks_performance
+    task_data = sample_task_data.copy()
+                ^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'FixtureFunctionDefinition' object has no attribute 'copy'
+__________________________ test_update_task_partial ___________________________
+tests\test_generated_api_2025-08-06_12-32-38.py:316: in test_update_task_partial
+    assert updated_task["status"] == sample_task_data["status"]  # Unchanged
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'status'
+=========================== short test summary info ===========================
+FAILED tests/test_generated_api_2025-08-06_12-32-38.py::test_list_tasks_performance
+FAILED tests/test_generated_api_2025-08-06_12-32-38.py::test_update_task_partial
+2 failed, 28 passed in 0.98s
+
+=============================

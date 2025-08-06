@@ -1,0 +1,49 @@
+
+# Analysis of API Issues and Suggested Improvements
+
+## Issues Identified
+
+- **Filtering Performance Issue**: 
+  - The `list_tasks` endpoint with filters returns fewer results than expected (16 instead of 34)
+  - The filtering logic itself appears correct, suggesting issues with test data or how filters are applied
+
+- **Whitespace Title Validation**:
+  - The API accepts whitespace-only titles when it should reject them
+  - Pydantic's `min_length=1` validation counts whitespace characters but doesn't ensure non-whitespace content
+
+- **Due Date Validation**:
+  - The API rejects current/future dates that should be valid (`FutureDatetime` is too restrictive)
+  - Test expects a 200 status code for a due date "just now" but receives 422
+
+## Suggested Improvements
+
+- **Improved Title Validation**:
+  ```python
+  @validator('title')
+  def title_not_whitespace(cls, v):
+      if not v.strip():
+          raise ValueError('Title cannot be just whitespace')
+      return v.strip()
+  ```
+
+- **Flexible Due Date Validation**:
+  ```python
+  @validator('due_date')
+  def validate_due_date(cls, v):
+      if v < datetime.now():
+          raise ValueError('Due date must be in the future')
+      return v
+  ```
+
+- **Filtering Optimization**:
+  - Consider using database-driven queries if performance is critical
+  - Add logging to filter application for debugging
+
+- **Input Sanitization**:
+  - Add consistent trimming for string fields to prevent leading/trailing whitespace issues
+
+- **Error Handling**:
+  - Provide more specific error messages for validation failures
+
+- **Type Consistency**:
+  - Ensure all date/datetime fields are properly handled across the application

@@ -1,0 +1,27 @@
+
+=== Test Run: 2025-08-06 13:33:33 ===
+...........................F.....F.F                                     [100%]
+================================== FAILURES ===================================
+__________________ test_list_tasks_with_filters_performance ___________________
+tests\test_generated_api_2025-08-06_13-32-32.py:339: in test_list_tasks_with_filters_performance
+    assert len(data) == 34  # 34 because 100/3 = 33.33, rounded up
+    ^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: assert 16 == 34
+E    +  where 16 = len([{'description': 'Description for task 4', 'due_date': '2025-08-07T13:33:33.295261', 'priority': 2, 'status': 0, ...},...scription': 'Description for task 34', 'due_date': '2025-08-07T13:33:33.295261', 'priority': 2, 'status': 0, ...}, ...])
+____________________________ test_whitespace_title ____________________________
+tests\test_generated_api_2025-08-06_13-32-32.py:401: in test_whitespace_title
+    assert response.status_code == 422
+E   assert 200 == 422
+E    +  where 200 = <Response [200 OK]>.status_code
+___________________________ test_due_date_just_now ____________________________
+tests\test_generated_api_2025-08-06_13-32-32.py:423: in test_due_date_just_now
+    assert response.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+=========================== short test summary info ===========================
+FAILED tests/test_generated_api_2025-08-06_13-32-32.py::test_list_tasks_with_filters_performance
+FAILED tests/test_generated_api_2025-08-06_13-32-32.py::test_whitespace_title
+FAILED tests/test_generated_api_2025-08-06_13-32-32.py::test_due_date_just_now
+3 failed, 33 passed in 1.28s
+
+=============================

@@ -1,0 +1,80 @@
+
+Based on the failing tests and the provided API implementation, here are the issues and suggested improvements:
+
+### Issues Identified:
+- The tests `test_list_tasks_filter_by_status` and `test_list_tasks_filter_by_priority` are failing because no tasks are being returned when filtering, even though they expect 1 result each
+- The issue appears to be related to the filtering logic in the `list_tasks` endpoint
+
+### Improvements for the API:
+
+- **Add input validation** for the filtering parameters to ensure they match the enum values:
+  ```python
+  @validator('status')
+  def validate_status(cls, v):
+      if v not in StatusOfTask:
+          raise ValueError("Invalid status value")
+      return v
+  ```
+
+- **Add logging** for debugging purposes to track API calls and filter operations:
+  ```python
+  import logging
+  logging.basicConfig(level=logging.INFO)
+  logger = logging.getLogger(__name__)
+  
+  # Add inside the list_tasks function:
+  logger.info(f"Filtering tasks with status: {status}, priority: {priority}")
+  ```
+
+- **Implement columnar filtering for better performance** if the task database grows large:
+  ```python
+  def list_tasks(...):
+      results = []
+      for task_id, task in tasks_db.items():
+          if (status is None or task.status == status) and \
+             (priority is None or task.priority == priority):
+              results.append(task)
+      return results
+  ```
+
+- **Add endpoint counter metrics** to monitor API usage:
+  ```python
+  from prometheus_fastapi_instrumentator import Instrumentator
+  
+  app = FastAPI()
+  Instrumentator().instrument(app).expose(app)
+  ```
+
+- **Improve error messages** for better debugging:
+  ```python
+  if not task:
+      raise HTTPException(status_code=404, detail=f"Task with id {task_id} not found")
+  ```
+
+- **Add response headers** for better HTTP response management:
+  ```python
+   @app.get("/tasks", response_model=List[Task])
+   def list_tasks(...):
+       # existing code
+       return Response(content=jsonable_encoder(results), media_type="application/json")
+   ```
+
+- **Add pagination capability** to prevent excessive data transfer:
+  ```python
+  @app.get("/tasks", response_model=List[Task])
+  def list_tasks(...,
+                 skip: int = Query(0, ge=0),
+                 limit: int = Query(10, ge=1, le=100)):
+       # ... existing filters
+       return results[skip:skip+limit]
+   ```
+
+- **Add type hinting for all parameters** to improve code clarity:
+  ```python
+  def update_status(task_id: UUID, status: StatusOfTask) -> Task:
+  ```
+
+The failing tests suggest that the filtering logic needs further investigation. You should verify that:
+1. Tasks are being created with the expected status and priority values
+2. The filter parameters in the tests exactly match the enum values defined in the API
+3. The tasks database is properly initialized with test data
