@@ -50,7 +50,7 @@ pip install -r requirements.txt
 ```
 
 ### ✅ 4. Get an LLM API Key and set it up
-Create a .env file in the root of the project and add your OpenRouter API key:
+Create a .env file in the root of the project and add your API key:
 
 ```.env
 API_KEY="your_api_key"

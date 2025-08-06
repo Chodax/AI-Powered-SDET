@@ -4,7 +4,6 @@ import sys
 import tempfile
 import subprocess
 from datetime import datetime
-from ipaddress import summarize_address_range
 
 from openai import OpenAI
 from fastapi import FastAPI
