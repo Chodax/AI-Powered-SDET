@@ -118,9 +118,11 @@ My app is in package {self.app_path}.
     def analyze_results_with_ai(self, result: subprocess.CompletedProcess, path: str) -> Optional[str]:
         print("🔎 Analyzing test results with AI...")
         new_prompt = (
-            f"Analyze the following pytest output and suggest what issues may exist in the API implementation. "
-            f"Suggest improvements for the API: {self.read_app_source_code(path)}. Structure your answer as bullet points.\n\n"
-            f"{result.stdout}"
+            f"Analyze the following API test results with the goal of identifying weaknesses or inefficiencies"
+            f"in the API design, behavior, performance, or robustness. API: {self.read_app_source_code(path)}"
+            f"Results: {result}. Based on the failures, response patterns, and edge cases, provide concrete and"
+            f"actionable suggestions to improve the API itself — such as enhancing response handling, improving error"
+            f"messages, refining endpoint structure, handling edge cases more gracefully, or optimizing performance."
         )
         try:
             response = self.client.chat.completions.create(
@@ -128,7 +130,8 @@ My app is in package {self.app_path}.
                 messages=[
                     {"role": "system", "content": "You are a Python test engineer."},
                     {"role": "user", "content": new_prompt}
-                ]
+                ],
+                temperature = 0.3
             )
             return response.choices[0].message.content
         except Exception as e:
