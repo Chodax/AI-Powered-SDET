@@ -15,7 +15,7 @@ class AITestAgent:
     def __init__(self, app: FastAPI, api_key: str):
         self.app = app
         self.api_key = api_key
-        self.client = OpenAI(api_key=self.api_key)
+        self.client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=self.api_key)
         self.schema = self.load_openapi_schema()
         self.app_path = ""
         self.generated_test_code = ""
@@ -46,7 +46,7 @@ Generate Pytest functions for testing all endpoints of a FastAPI app:
 
 {self.schema}
 
-Use realistic test data and assert status codes. Use the requests library.
+Use realistic test data and assert status codes. Use the requests library. Assume we are using `TestClient` from `fastapi.testclient`.
 Also cover performance, filtering and edge test cases. Make sure to clear database after each test run.
 My app is in package {self.app_path}.
 """

@@ -36,13 +36,24 @@ git clone https://github.com/yourname/AI-Powered-SDET.git
 cd AI-Powered-SDET
 ```
 
-### ✅ 2. Install Dependencies
+### ✅ 2. Create and activate virtual environment
+
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+### ✅ 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### ✅ 3. Get an LLM API Key
+### ✅ 4. Get an LLM API Key and set it up
+Create a .env file in the root of the project and add your OpenRouter API key:
 
+```.env
+API_KEY="your_api_key"
+```
 
-### ✅ 4. Run demo.py file
+### ✅ 5. Run demo.py file

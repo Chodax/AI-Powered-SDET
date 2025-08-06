@@ -48,7 +48,6 @@ class TaskUpdate(BaseModel):
 @app.post("/tasks", response_model=Task)
 def create_task(task: TaskCreate):
     task_id = uuid4()
-    # Mozda treba if za description ili model_dump
     new_task = Task(task_id=task_id,
                     title=task.title,
                     description=task.description,
